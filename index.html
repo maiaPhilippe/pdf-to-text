@@ -1,259 +1,93 @@
+<!DOCTYPE html>
 <html>
+
 <head>
-	<meta <charset="UTF-8">
+	<meta charset="UTF-8">
+	<title>PDF To Text</title>
+	<link rel="stylesheet" href="/css/style.css">
 </head>
 
-<script src="/dist/tesseract.dev.js"></script>
-<script>
-var note = '';
-var count = 1;
-var numpag = 0;
-function progressUpdate(packet){
-	var log = document.getElementById('log');
-
-	if(log.firstChild && log.firstChild.status === packet.status){
-		if('progress' in packet){
-			var progress = log.firstChild.querySelector('progress')
-			progress.value = packet.progress
-		}
-	}else{
-		var line = document.createElement('div');
-		line.status = packet.status;
-		var status = document.createElement('div')
-		status.className = 'status'
-		status.appendChild(document.createTextNode(packet.status))
-		line.appendChild(status)
-
-		if('progress' in packet){
-			var progress = document.createElement('progress')
-			progress.value = packet.progress
-			progress.max = 1
-			line.appendChild(progress)
-		}
-
-
-		if(packet.status == 'done'){
-			note = note + packet.data.text
-			var pre = document.createElement('pre')
-			pre.appendChild(document.createTextNode(note))
-			line.innerHTML = ''
-			line.appendChild(pre)
-			if (count != numpag){
-			pdf.onchange()}
-		}
-
-		log.insertBefore(line, log.firstChild)
-	}
-}
-
-function recognizeFile(file){
-	document.querySelector("#log").innerHTML = ''
-
-	Tesseract.recognize(file, {
-		lang: document.querySelector('#langsel').value
-	})
-		.progress(function(packet){
-			console.info(packet)
-			progressUpdate(packet)
-
-		})
-		.then(function(data){
-			console.log(data)
-			progressUpdate({ status: 'done', data: data })
-		})
-}
-</script>
-<select id="langsel" onchange="window.lastFile && recognizeFile(window.lastFile)">
-<option value='afr'     > Afrikaans             </option>
-<option value='ara'     > Arabic                </option>
-<option value='aze'     > Azerbaijani           </option>
-<option value='bel'     > Belarusian            </option>
-<option value='ben'     > Bengali               </option>
-<option value='bul'     > Bulgarian             </option>
-<option value='cat'     > Catalan               </option>
-<option value='ces'     > Czech                 </option>
-<option value='chi_sim' > Chinese               </option>
-<option value='chi_tra' > Traditional Chinese   </option>
-<option value='chr'     > Cherokee              </option>
-<option value='dan'     > Danish                </option>
-<option value='deu'     > German                </option>
-<option value='ell'     > Greek                 </option>
-<option value='eng'     > English                </option>
-<option value='enm'     > English (Old)         </option>
-<option value='meme'     > Internet Meme                </option>
-<option value='epo'     > Esperanto             </option>
-<option value='epo_alt' > Esperanto alternative </option>
-<option value='equ'     > Math                  </option>
-<option value='est'     > Estonian              </option>
-<option value='eus'     > Basque                </option>
-<option value='fin'     > Finnish               </option>
-<option value='fra'     > French                </option>
-<option value='frk'     > Frankish              </option>
-<option value='frm'     > French (Old)          </option>
-<option value='glg'     > Galician              </option>
-<option value='grc'     > Ancient Greek         </option>
-<option value='heb'     > Hebrew                </option>
-<option value='hin'     > Hindi                 </option>
-<option value='hrv'     > Croatian              </option>
-<option value='hun'     > Hungarian             </option>
-<option value='ind'     > Indonesian            </option>
-<option value='isl'     > Icelandic             </option>
-<option value='ita'     > Italian               </option>
-<option value='ita_old' > Italian (Old)         </option>
-<option value='jpn'     > Japanese              </option>
-<option value='kan'     > Kannada               </option>
-<option value='kor'     > Korean                </option>
-<option value='lav'     > Latvian               </option>
-<option value='lit'     > Lithuanian            </option>
-<option value='mal'     > Malayalam             </option>
-<option value='mkd'     > Macedonian            </option>
-<option value='mlt'     > Maltese               </option>
-<option value='msa'     > Malay                 </option>
-<option value='nld'     > Dutch                 </option>
-<option value='nor'     > Norwegian             </option>
-<option value='pol'     > Polish                </option>
-<option value='por'     selected> Portuguese            </option>
-<option value='ron'     > Romanian              </option>
-<option value='rus'     > Russian               </option>
-<option value='slk'     > Slovakian             </option>
-<option value='slv'     > Slovenian             </option>
-<option value='spa'     > Spanish               </option>
-<option value='spa_old' > Old Spanish           </option>
-<option value='sqi'     > Albanian              </option>
-<option value='srp'     > Serbian (Latin)       </option>
-<option value='swa'     > Swahili               </option>
-<option value='swe'     > Swedish               </option>
-<option value='tam'     > Tamil                 </option>
-<option value='tel'     > Telugu                </option>
-<option value='tgl'     > Tagalog               </option>
-<option value='tha'     > Thai                  </option>
-<option value='tur'     > Turkish               </option>
-<option value='ukr'     > Ukrainian             </option>
-<option value='vie'     > Vietnamese            </option>
-</select>
-
-<button onclick="recognizeFile('../node/cosmic.png')">Sample Image</button>
-<input type="file" onchange="recognizeFile(window.lastFile=this.files[0])">
-
-<div id="log"></div>
-
-
-<style>
-#log > div {
-    color: #313131;
-    border-top: 1px solid #dadada;
-    padding: 9px;
-    display: flex;
-}
-#log > div:first-child {
-    border: 0;
-}
-
-
-.status {
-	min-width: 250px;
-}
-#log {
-    border: 1px solid #dadada;
-    padding: 10px;
-    margin-top: 20px;
-    min-height: 100px;
-		display: inline-block;
-		width: 45%;
-		float: right;
-}
-.pre {
-	display: inline-block;
-    white-space: pre-wrap;
-}
-body {
-    font-family: sans-serif;
-    margin: 30px;
-}
-
-progress {
-    display: block;
-    width: 100%;
-    transition: opacity 0.5s linear;
-}
-progress[value="1"] {
-    opacity: 0.5;
-}
-</style>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.1/processing-api.min.js"></script><html>
-<!--
-  Created using jsbin.com
-  Source can be edited via http://jsbin.com/pdfjs-helloworld-v2/8598/edit
--->
 <body>
-  <canvas id="the-canvas" style="
-	 border: 1px solid black;
-    width: 45%;
-    float: left;
-    height: auto;"></canvas>
-  <input id='pdf' type='file'/>
+	<select id="langsel" onchange="window.lastFile && recognizeFile(window.lastFile)">
+		<option value='afr'     > Afrikaans             </option>
+		<option value='ara'     > Arabic                </option>
+		<option value='aze'     > Azerbaijani           </option>
+		<option value='bel'     > Belarusian            </option>
+		<option value='ben'     > Bengali               </option>
+		<option value='bul'     > Bulgarian             </option>
+		<option value='cat'     > Catalan               </option>
+		<option value='ces'     > Czech                 </option>
+		<option value='chi_sim' > Chinese               </option>
+		<option value='chi_tra' > Traditional Chinese   </option>
+		<option value='chr'     > Cherokee              </option>
+		<option value='dan'     > Danish                </option>
+		<option value='deu'     > German                </option>
+		<option value='ell'     > Greek                 </option>
+		<option value='eng'     > English                </option>
+		<option value='enm'     > English (Old)         </option>
+		<option value='meme'     > Internet Meme                </option>
+		<option value='epo'     > Esperanto             </option>
+		<option value='epo_alt' > Esperanto alternative </option>
+		<option value='equ'     > Math                  </option>
+		<option value='est'     > Estonian              </option>
+		<option value='eus'     > Basque                </option>
+		<option value='fin'     > Finnish               </option>
+		<option value='fra'     > French                </option>
+		<option value='frk'     > Frankish              </option>
+		<option value='frm'     > French (Old)          </option>
+		<option value='glg'     > Galician              </option>
+		<option value='grc'     > Ancient Greek         </option>
+		<option value='heb'     > Hebrew                </option>
+		<option value='hin'     > Hindi                 </option>
+		<option value='hrv'     > Croatian              </option>
+		<option value='hun'     > Hungarian             </option>
+		<option value='ind'     > Indonesian            </option>
+		<option value='isl'     > Icelandic             </option>
+		<option value='ita'     > Italian               </option>
+		<option value='ita_old' > Italian (Old)         </option>
+		<option value='jpn'     > Japanese              </option>
+		<option value='kan'     > Kannada               </option>
+		<option value='kor'     > Korean                </option>
+		<option value='lav'     > Latvian               </option>
+		<option value='lit'     > Lithuanian            </option>
+		<option value='mal'     > Malayalam             </option>
+		<option value='mkd'     > Macedonian            </option>
+		<option value='mlt'     > Maltese               </option>
+		<option value='msa'     > Malay                 </option>
+		<option value='nld'     > Dutch                 </option>
+		<option value='nor'     > Norwegian             </option>
+		<option value='pol'     > Polish                </option>
+		<option value='por'     selected> Portuguese            </option>
+		<option value='ron'     > Romanian              </option>
+		<option value='rus'     > Russian               </option>
+		<option value='slk'     > Slovakian             </option>
+		<option value='slv'     > Slovenian             </option>
+		<option value='spa'     > Spanish               </option>
+		<option value='spa_old' > Old Spanish           </option>
+		<option value='sqi'     > Albanian              </option>
+		<option value='srp'     > Serbian (Latin)       </option>
+		<option value='swa'     > Swahili               </option>
+		<option value='swe'     > Swedish               </option>
+		<option value='tam'     > Tamil                 </option>
+		<option value='tel'     > Telugu                </option>
+		<option value='tgl'     > Tagalog               </option>
+		<option value='tha'     > Thai                  </option>
+		<option value='tur'     > Turkish               </option>
+		<option value='ukr'     > Ukrainian             </option>
+		<option value='vie'     > Vietnamese            </option>
+	</select>
 
-  <!-- Use latest PDF.js build from Github -->
-  <script type="text/javascript" src="https://rawgithub.com/mozilla/pdf.js/gh-pages/build/pdf.js"></script>
+	<input id='pdf' type='file' />
 
-  <script type="text/javascript">
-    //
-    // Disable workers to avoid yet another cross-origin issue (workers need the URL of
-    // the script to be loaded, and dynamically loading a cross-origin script does
-    // not work)
-    //
-    PDFJS.disableWorker = true;
-    //
-    // Asynchronous download PDF as an ArrayBuffer
-    //
-    var pdf = document.getElementById('pdf');
-		//
-    pdf.onchange = function(ev) {
-      if (file = document.getElementById('pdf').files[0]) {
-        fileReader = new FileReader();
+	<div id="log"></div>
 
-        fileReader.onload = function(ev) {
-          console.log(ev);
-          PDFJS.getDocument(fileReader.result).then(function getPdfHelloWorld(pdf) {
-            //
-            // Fetch the first page
-            //
-            console.log(pdf)
-            pdf.getPage(count).then(function getPageHelloWorld(page) {
-              var scale = 2.5;
-              var viewport = page.getViewport(scale);
-              //
-              // Prepare canvas using PDF page dimensions
-              //
-              var canvas = document.getElementById('the-canvas');
-              var context = canvas.getContext('2d');
-              canvas.height = viewport.height;
-              canvas.width = viewport.width;
-              //
-              // Render PDF page into canvas context
-              //
-              var task = page.render({canvasContext: context, viewport: viewport})
-              task.promise.then(function(){
-                console.log(canvas.toDataURL('image/jpeg'));
-								var canvass = document.getElementById('the-canvas');
-								recognizeFile(canvas.toDataURL('image/jpeg'));
-								count++;
-              });
-            });
-          }, function(error){
-            console.log(error);
-          });
-        };
-        fileReader.readAsArrayBuffer(file);
-      }
-    }
-var numpag = pdf.numPages();
-  </script>
+	<canvas id="the-canvas" style="border: 1px solid black; width: 45%; float: left; height: auto;"></canvas>
 
-
-<style id="jsbin-css">
-</style>
-<script>
-</script>
+	<script type="text/javascript" src="//rawgithub.com/mozilla/pdf.js/gh-pages/build/pdf.js"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.1/processing-api.min.js"></script>
+	<script type="text/javascript" src="/dist/tesseract.dev.js"></script>
+	<script type="text/javascript" src="/js/app.js"></script>
+	<script type="text/javascript" src="/js/file-to-canvas.js"></script>
 </body>
+
 </html>
