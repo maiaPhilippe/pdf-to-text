@@ -1,0 +1,22 @@
+html, body, body > section {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+.pdf-preview {
+    border-right: 1px solid darkgray;
+}
+
+.pdf-result {
+    border-left: 1px solid darkgray;
+}
+
+.pdf-result, .pdf-preview {
+    overflow: auto;
+}
