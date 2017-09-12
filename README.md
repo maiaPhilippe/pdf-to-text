@@ -3,10 +3,6 @@
 ##### PDF-to-Text is an OCR, Pure Javascript by tesseract.js api, mobile-ready that convert PDF text-image to text.
 
 ### Tech
-  - HTML
-  - JavaScript
-  - CSS
-  - Magic
 
 PDF-to-Text uses a number of open source projects to work properly:
 
