@@ -8,7 +8,7 @@
   - CSS
   - Magic
 
-Dillinger uses a number of open source projects to work properly:
+PDF-to-Text uses a number of open source projects to work properly:
 
 * [JavaScript] - awesome!
 * [HTML] - HTML enhanced for web apps!
