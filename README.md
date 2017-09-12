@@ -18,6 +18,7 @@ PDF-to-Text requires [Node.js](https://nodejs.org/) v4+ or any server enviroment
 Start the server.
 
 ```sh
+$ npm install http-server -g
 $ cd pdf-to-text-master
 $ http-server
 ```
